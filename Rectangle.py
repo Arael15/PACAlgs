@@ -58,8 +58,8 @@ distributions = {
 
 def sample_test(m):
 
-    for x in range(len(distributions)):
-        for y in range(len(distributions)):
+    for x in range(24, 25):
+        for y in range(24, 25):
             print('Now running distribution', x, y)
             x_var, x_args = distributions[x]
             y_var, y_args = distributions[y]
@@ -84,7 +84,7 @@ def sample_test(m):
                     train_y = y_var(y_args[0], m)
                     test_y = y_var(y_args[0], 10000)
                 train_xy = list(zip(train_x, train_y))
-                pos_train = [((a, b), 1) for (a, b) in train_xy if rect_x[0] < a < rect_x[1] and rect_y[0] < b < rect_y[1]]
+                pos_train = [((a, b), 1) for (a, b) in train_xy if rect_x[0] <= a <= rect_x[1] and rect_y[0] <= b <= rect_y[1]]
                 if len(pos_train) < 2:
                     predict_x, predict_y = ((0, 0), (0, 0))
                 else:
@@ -95,8 +95,8 @@ def sample_test(m):
                 rect_x_uniform = sorted(np.random.uniform(0, 10000, 2))
                 rect_y_uniform = sorted(np.random.uniform(0, 10000, 2))
                 pos_train_uniform = [((a, b), 1) for (a, b) in train_xy
-                                     if rect_x_uniform[0] < a < rect_x_uniform[1]
-                                     and rect_y_uniform[0] < b < rect_y_uniform[1]]
+                                     if rect_x_uniform[0] <= a <= rect_x_uniform[1]
+                                     and rect_y_uniform[0] <= b <= rect_y_uniform[1]]
                 if len(pos_train_uniform) < 2:
                     predict_x_uniform, predict_y_uniform = ((0, 0), (0, 0))
                 else:
@@ -130,13 +130,13 @@ def sample_test(m):
                 # correct_u = [i for i in predict_true_u if i in real_true_u] \
                 #             + [i for i in predict_false_u if i in real_false_u]
                 predict_wrong = [(a, b) for (a, b) in test_xy if
-                                 not (predict_x[0] < a < predict_x[1] and predict_y[0] < b < predict_y[1])
-                                 and (rect_x[0] < a < rect_x[1] and rect_y[0] < b < rect_y[1])]
+                                 not (predict_x[0] <= a <= predict_x[1] and predict_y[0] <= b <= predict_y[1])
+                                 and (rect_x[0] <= a <= rect_x[1] and rect_y[0] <= b <= rect_y[1])]
                 predict_wrong_u = [(a, b) for (a, b) in test_xy if
-                                   not (predict_x_uniform[0] < a < predict_x_uniform[1]
-                                        and predict_y_uniform[0] < b < predict_y_uniform[1])
-                                   and (rect_x_uniform[0] < a < rect_x_uniform[1]
-                                        and rect_y_uniform[0] < b < rect_y_uniform[1])]
+                                   not (predict_x_uniform[0] <= a <= predict_x_uniform[1]
+                                        and predict_y_uniform[0] <= b <= predict_y_uniform[1])
+                                   and (rect_x_uniform[0] <= a <= rect_x_uniform[1]
+                                        and rect_y_uniform[0] <= b <= rect_y_uniform[1])]
                 # print(predict_true)
                 # print(predict_false)
                 # print(real_true)
@@ -148,8 +148,9 @@ def sample_test(m):
                 # print(len(predict_true))
                 # f.write(str(len(correct)) + '\n')
                 # fu.write(str(len(correct_u)) + '\n')
-                f.write(str(10000 - len(predict_wrong)) + '\n')
-                fu.write(str(10000 - len(predict_wrong_u)) + '\n')
+                print(10000 - len(predict_wrong))
+                # f.write(str(10000 - len(predict_wrong)) + '\n')
+                # fu.write(str(10000 - len(predict_wrong_u)) + '\n')
             f.close()
             fu.close()
 
@@ -163,6 +164,6 @@ def pac_test(delta, epsilon):
 if __name__ == '__main__':
     start = time.time()
     pac_test(0.05, 0.05)
-    pac_test(0.01, 0.01)
+    # pac_test(0.01, 0.01)
     end = time.time()
     print(end - start)
